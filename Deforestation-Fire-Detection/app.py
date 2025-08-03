@@ -1,14 +1,32 @@
 import streamlit as st
 import numpy as np
-import pandas as pd
 import joblib
-import plotly.express as px
-from streamlit_lottie import st_lottie
-import json
+import os
+import urllib.request
+
+# Set page title
+st.set_page_config(page_title="🔥 Deforestation & Fire Detection", layout="centered")
+
+# Define model and scaler paths
+MODEL_PATH = "best_fire_detection_model.pkl"
+SCALER_PATH = "scaler.pkl"
+
+# Direct Google Drive link for model
+MODEL_URL = "https://drive.google.com/uc?export=download&id=1L7J928abn-28MFTEIkkLasEdgvSGCZgQ"
+
+# Function to download file if not present
+def download_file_if_missing(path, url):
+    if not os.path.exists(path):
+        with st.spinner(f"📦 Downloading {path}..."):
+            urllib.request.urlretrieve(url, path)
+            st.success(f"{path} downloaded successfully.")
+
+# Download model only if not present
+download_file_if_missing(MODEL_PATH, MODEL_URL)
 
 # Load model and scaler
-model = joblib.load("best_fire_detection_model.pkl")
-scaler = joblib.load("scaler.pkl")
+model = joblib.load(MODEL_PATH)
+scaler = joblib.load(SCALER_PATH)
 
 # Set page config
 st.set_page_config(page_title="🔥 Fire Type Classifier", layout="centered")
